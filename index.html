@@ -1,554 +1,115 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>معرض التقنية الرقمية - ثانوية مشكاة المنار</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: 'Tajawal', sans-serif;
-      background: #000;
-      color: #ffffff;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* خلفية متحركة */
-    .bg-animation {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-    }
-
-    .bg-animation::before {
-      content: '';
-      position: absolute;
-      width: 200%;
-      height: 200%;
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
-      animation: float 20s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      33% { transform: translate(30px, -30px) rotate(120deg); }
-      66% { transform: translate(-20px, 20px) rotate(240deg); }
-    }
-
-    /* جزيئات متحركة */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      background: rgba(255, 215, 0, 0.4);
-      border-radius: 50%;
-      animation: rise linear infinite;
-    }
-
-    @keyframes rise {
-      0% { transform: translateY(100vh) scale(0); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateY(-100vh) scale(1); opacity: 0; }
-    }
-
-    header {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 100px 20px 60px;
-    }
-
-    .logo-container {
-      position: relative;
-      display: inline-block;
-      animation: logoFloat 3s ease-in-out infinite;
-    }
-
-    @keyframes logoFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-    }
-
-    .logo {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      border: 4px solid rgba(255, 215, 0, 0.5);
-      box-shadow: 0 0 40px rgba(255, 215, 0, 0.3),
-                  0 0 80px rgba(255, 215, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: 0 0 60px rgba(255, 215, 0, 0.5),
-                  0 0 120px rgba(255, 215, 0, 0.2);
-    }
-
-    header h1 {
-      font-size: 4em;
-      font-weight: 900;
-      margin-top: 30px;
-      background: linear-gradient(135deg, #ffd700, #fff, #ffd700);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 3s linear infinite;
-      text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-    }
-
-    @keyframes shimmer {
-      to { background-position: 200% center; }
-    }
-
-    header p {
-      font-size: 1.2em;
-      margin-top: 15px;
-      color: #b0b0b0;
-    }
-
-    /* المحتوى الرئيسي */
-    .container {
-      position: relative;
-      z-index: 10;
-      max-width: 1400px;
-      margin: 60px auto;
-      padding: 0 40px;
-    }
-
-    .slider-wrapper {
-      position: relative;
-      height: 650px;
-      perspective: 1000px;
-    }
-
-    .card {
-      background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.9));
-      border-radius: 30px;
-      border: 2px solid rgba(212, 175, 55, 0.3);
-      padding: 50px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
-                  0 0 40px rgba(255, 215, 0, 0.1);
-      backdrop-filter: blur(20px);
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transform: scale(0.9) rotateY(10deg);
-      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: none;
-    }
-
-    .card.active {
-      opacity: 1;
-      transform: scale(1) rotateY(0deg);
-      pointer-events: auto;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, #ffd700, transparent);
-      border-radius: 30px 30px 0 0;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 30px;
-      gap: 30px;
-    }
-
-    .card-header img {
-      width: 150px;
-      height: 150px;
-      border-radius: 25px;
-      object-fit: cover;
-      border: 3px solid rgba(212,175,55,0.6);
-      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .card-header img:hover {
-      transform: scale(1.05) rotate(-2deg);
-      box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
-    }
-
-    .featured-badge {
-      background: linear-gradient(135deg, #ffd700, #ffed4e);
-      color: #000;
-      padding: 10px 25px;
-      border-radius: 30px;
-      display: inline-block;
-      margin-bottom: 20px;
-      font-weight: 700;
-      font-size: 1.1em;
-      box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    h2 {
-      background: linear-gradient(135deg, #ffd700, #fff, #ffd700);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 2.2em;
-      margin-bottom: 20px;
-      border-bottom: 3px solid rgba(212,175,55,0.4);
-      padding-bottom: 15px;
-      animation: shimmer 3s linear infinite;
-    }
-
-    p { 
-      font-size: 1.25em; 
-      line-height: 2; 
-      color: #e0e0e0;
-    }
-
-    /* أزرار التحكم */
-    .controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      margin-top: 50px;
-      position: relative;
-      z-index: 20;
-    }
-
-    .control-btn {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(212, 175, 55, 0.1));
-      border: 2px solid rgba(255, 215, 0, 0.5);
-      color: #ffd700;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      font-size: 1.8em;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 5px 20px rgba(255, 215, 0, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .control-btn:hover {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(212, 175, 55, 0.3));
-      transform: scale(1.1);
-      box-shadow: 0 8px 30px rgba(255, 215, 0, 0.4);
-      border-color: #ffd700;
-    }
-
-    .control-btn:active {
-      transform: scale(0.95);
-    }
-
-    .control-btn.pause-btn {
-      width: 80px;
-      height: 80px;
-      font-size: 2em;
-    }
-
-    .control-btn.pause-btn.paused {
-      background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(212, 175, 55, 0.2));
-    }
-
-    /* مؤشر الشرائح */
-    .indicators {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 40px;
-      position: relative;
-      z-index: 20;
-    }
-
-    .indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 215, 0, 0.3);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-    }
-
-    .indicator.active {
-      background: #ffd700;
-      transform: scale(1.3);
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-      border-color: rgba(255, 215, 0, 0.5);
-    }
-
-    .indicator:hover {
-      background: rgba(255, 215, 0, 0.6);
-      transform: scale(1.2);
-    }
-
-    footer {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      padding: 80px 20px;
-      color: #b0b0b0;
-      margin-top: 100px;
-      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.5));
-      font-size: 1.1em;
-    }
-
-    @media (max-width: 768px) {
-      header h1 { font-size: 2.5em; }
-      .card { padding: 30px; }
-      .card-header { flex-direction: column-reverse; align-items: center; }
-      .card-header img { width: 120px; height: 120px; }
-      h2 { font-size: 1.6em; }
-      .control-btn { width: 60px; height: 60px; font-size: 1.5em; }
-      .slider-wrapper { height: 700px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نادي التقنية | الدفعة الثامنة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#fff7e6;--navy2:#ffe8b8;--gold:#d99a22;--gold2:#ffe6a8;
+  --ink:#3b2a16;--muted:#8b7355;--paper:#fffdf8;--line:#f0dfbd;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Cairo, sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:
+radial-gradient(circle at 10% 10%,rgba(255,214,120,.28),transparent 25%),
+radial-gradient(circle at 90% 80%,rgba(255,190,100,.18),transparent 30%),#fffdf8}
+.hero{min-height:620px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:
+linear-gradient(125deg,#fffdf7,#fff1cf 52%,#ffe6ad),
+radial-gradient(circle at 50% 0%,#fff8e8,transparent 60%);color:#3b2a16;padding:70px 20px 110px}
+.hero:before{content:"";position:absolute;inset:20px;border:1px solid rgba(217,154,34,.45);clip-path:polygon(0 0,100% 0,100% 82%,96% 82%,96% 100%,4% 100%,4% 82%,0 82%);pointer-events:none}
+.hero:after{content:"";position:absolute;width:800px;height:800px;border:1px solid rgba(216,173,85,.12);border-radius:50%;transform:rotate(25deg);box-shadow:0 0 0 35px rgba(216,173,85,.025),0 0 0 70px rgba(216,173,85,.02)}
+.hero-content{position:relative;z-index:2}
+.eyebrow{letter-spacing:5px;color:#b87912;font-size:.8rem;font-weight:800;margin-bottom:24px}
+.hero h1{font-size:clamp(2.7rem,7vw,6.8rem);line-height:1.05;font-weight:900;letter-spacing:-2px}
+.hero h1 span{display:block;color:var(--gold);font-size:.42em;letter-spacing:3px;margin-top:22px}
+.hero p{margin-top:24px;color:#8b7355;font-size:1.05rem}
+.hero-line{width:130px;height:3px;background:linear-gradient(90deg,transparent,#d99a22,transparent);margin:30px auto}
+.hero-logo{width:105px;height:105px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 25px;color:#b87912;font-size:.75rem;background:rgba(255,255,255,.55);box-shadow:0 0 0 8px rgba(217,154,34,.10),0 15px 50px rgba(130,90,20,.12)}
+main{max-width:1280px;margin:-65px auto 90px;position:relative;z-index:4;padding:0 22px}
+.leader-wrap{background:rgba(255,255,255,.96);border:1px solid rgba(216,173,85,.5);box-shadow:0 25px 80px rgba(130,90,20,.13);padding:45px;border-radius:4px;position:relative}
+.leader-wrap:before,.leader-wrap:after{content:"";position:absolute;width:45px;height:45px;border-color:var(--gold);border-style:solid}
+.leader-wrap:before{top:15px;right:15px;border-width:2px 2px 0 0}
+.leader-wrap:after{bottom:15px;left:15px;border-width:0 0 2px 2px}
+.section-kicker{text-align:center;color:var(--gold);font-size:.8rem;font-weight:900;letter-spacing:3px;margin-bottom:10px}
+.section-title{text-align:center;font-size:2.2rem;font-weight:900;color:#5a3b16;margin-bottom:30px}
+.leader{display:grid;grid-template-columns:1fr 1.2fr;gap:45px;align-items:center;direction:ltr}
+.leader-info{direction:rtl;text-align:right}
+.leader-photo{height:360px;min-height:280px}
+.photo{background:linear-gradient(145deg,#edf2f7,#fff);border:2px dashed #c7a45b;display:flex;align-items:center;justify-content:center;color:#a17b2d;font-weight:700;position:relative;overflow:hidden}
+.photo:before{content:"";position:absolute;inset:12px;border:1px solid rgba(216,173,85,.25)}
+.leader-photo{font-size:1.1rem}
+.rank{display:inline-flex;align-items:center;gap:10px;color:var(--gold);font-weight:900;font-size:.85rem;margin-bottom:18px}
+.rank:before{content:"";width:35px;height:2px;background:var(--gold)}
+.leader h2{font-size:clamp(2rem,4vw,3.4rem);color:#5a3b16;line-height:1.2;margin-bottom:15px}
+.leader-desc{color:var(--muted);line-height:2;font-size:1.05rem;max-width:480px}
+.gold-button{display:inline-block;margin-top:25px;background:linear-gradient(135deg,#f0b84b,#d68c16);color:#fff;text-decoration:none;padding:13px 28px;border-right:4px solid var(--gold);font-weight:800;transition:.3s}
+.gold-button:hover{background:var(--gold);color:#5a3b16;transform:translateX(-5px)}
+.members-section{margin-top:90px}
+.members-heading{text-align:center;margin-bottom:35px}
+.members-heading .section-title{margin-bottom:8px}
+.members-heading p{color:var(--muted)}
+.members-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.member{background:#fffdf8;border:1px solid var(--line);padding:15px;position:relative;transition:.35s;box-shadow:0 8px 25px rgba(130,90,20,.07)}
+.member:after{content:"";position:absolute;bottom:0;right:0;width:0;height:3px;background:var(--gold);transition:.35s}
+.member:hover{transform:translateY(-10px);box-shadow:0 20px 45px rgba(130,90,20,.14);border-color:rgba(216,173,85,.7)}
+.member:hover:after{width:100%}
+.member-photo{height:235px;margin-bottom:18px}
+.member-no{position:absolute;top:25px;right:25px;background:#fff1cf;color:#b87912;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;z-index:2}
+.member h3{font-size:1.15rem;color:#5a3b16;margin-bottom:5px}
+.member p{font-size:.78rem;color:#8793a3}
+footer{background:#fff1cf;color:#8b7355;text-align:center;padding:35px 20px;border-top:3px solid #d99a22;font-size:.9rem}
+footer strong{color:#b87912}
+@media(max-width:950px){.members-grid{grid-template-columns:repeat(3,1fr)}.leader{grid-template-columns:1fr}.leader-info{text-align:center}.leader-desc{margin:auto}.leader-photo{height:300px}}
+@media(max-width:650px){.hero{min-height:520px;padding-top:45px}.hero h1{letter-spacing:-1px}.leader-wrap{padding:25px 18px}.members-grid{grid-template-columns:repeat(2,1fr);gap:12px}.member-photo{height:170px}.member{padding:10px}.member h3{font-size:1rem}.section-title{font-size:1.7rem}}
+</style>
 </head>
-
 <body>
-
-<div class="bg-animation"></div>
-
-<div class="particles" id="particles"></div>
-
-<header>
-  <div class="logo-container">
-    <img src="photo-output.png" class="logo" alt="شعار المدرسة">
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-logo">مكان الشعار</div>
+    <h1> نادي التقنية الرقمية <span> DIGITAL TECHNOLOGY CLUB </span></h1>
+    <div class="hero-line"></div>
+    <p> ثانوية مشكاة المنار الأهلية </p>
   </div>
-  <h1>معرض التقنية الرقمية</h1>
-  <p>ثانوية مشكاة المنار الأهلية | بإشراف الأستاذ <strong>محمود سعيد</strong></p>
-</header>
+</section>
 
-<main class="container">
-  <div class="slider-wrapper">
-    <div class="card active">
-      <div class="featured-badge">⭐ مميز</div>
-      <h2>منصة قدرات </h2>
-      <div class="card-header">
-        <div><p>فهد العتيبي<br>محمد العتيبي</p></div>
+<main>
+  <section class="leader-wrap">
+    <div class="section-kicker">LEADERSHIP</div>
+    <div class="section-title">قائد النادي</div>
+    <div class="leader">
+      <div class="photo leader-photo">مكان صورة رئيس النادي</div>
+      <div class="leader-info">
+        <div class="rank">رئيس نادي التقنية</div>
+        <h2>اسم رئيس النادي</h2>
+        <p class="leader-desc">نبذة قصيرة عن رئيس نادي التقنية، ومسيرته في قيادة النادي وصناعة التجارب التقنية المميزة.</p>
+        <a class="gold-button" href="#members">استعراض أعضاء الدفعة</a>
       </div>
-      <p>موقع يساعد الطلاب لـ الاستعداد الجيد لاختبار القدرات</p>
     </div>
+  </section>
 
-    <div class="card">
-      <div class="featured-badge">⭐ مميز</div>
-      <h2>قسم التميز الرقمي</h2>
-      <div class="card-header">
-        <div><p>طلال الحارثي<br>محمد القحطاني</p></div>
-      </div>
-      <p>دمج الذكاء الاصطناعي وإنترنت الأشياء لتحقيق بيئة تعليمية مبتكرة وذكية</p>
+  <section class="members-section" id="members">
+    <div class="members-heading">
+      <div class="section-kicker">THE EIGHTH COHORT</div>
+      <div class="section-title">أعضاء الدفعة الثامنة</div>
+      <p>نخبة من الأعضاء وصنّاع الإنجاز في نادي التقنية</p>
     </div>
-
-    <div class="card">
-      <h2>مساعد شخصي </h2>
-      <div class="card-header">
-        <div><p>عمر العتيبي</p></div>
-      </div>
-      <p>مساعد ذكي متطور تم تطويره باستخدام Python و Unity لتقديم تجربة تفاعلية فريدة</p>
+    <div class="members-grid">
+      <article class="member"><span class="member-no">01</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو الأول</h3><p>عضو الدفعة الثامنة</p></article>
+      <article class="member"><span class="member-no">02</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو الثاني</h3><p>عضو الدفعة الثامنة</p></article>
+      <article class="member"><span class="member-no">03</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو الثالث</h3><p>عضو الدفعة الثامنة</p></article>
+      <article class="member"><span class="member-no">04</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو الرابع</h3><p>عضو الدفعة الثامنة</p></article>
+      <article class="member"><span class="member-no">05</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو الخامس</h3><p>عضو الدفعة الثامنة</p></article>
+      <article class="member"><span class="member-no">06</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو السادس</h3><p>عضو الدفعة الثامنة</p></article>
+      <article class="member"><span class="member-no">07</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو السابع</h3><p>عضو الدفعة الثامنة</p></article>
+      <article class="member"><span class="member-no">08</span><div class="photo member-photo">مكان الصورة</div><h3>اسم العضو الثامن</h3><p>عضو الدفعة الثامنة</p></article>
     </div>
-
-    <div class="card">
-      <h2>مصحح نصوص</h2>
-      <div class="card-header">
-        <div><p>أحمد آل عادي</p></div>
-      </div>
-      <p>لعبة تفاعلية مبتكرة لتحسين المهارات اللغوية والإملائية بأسلوب ممتع</p>
-    </div>
-
-    <div class="card">
-      <h2>تنظيم الأهداف</h2>
-      <div class="card-header">
-        <div><p>حمد القحطاني</p></div>
-      </div>
-      <p>منظم مهام وأهداف ذكي مصمم خصيصاً لمساعدة الطلاب على تحقيق إنجازاتهم</p>
-    </div>
-
-    <div class="card">
-      <h2>سجل درجات</h2>
-      <div class="card-header">
-        <div><p>فهد الأحمري</p></div>
-      </div>
-      <p>أداة رقمية متقدمة لتسهيل عملية رصد ومتابعة الدرجات الدراسية</p>
-    </div>
-
-    <div class="card">
-      <h2>تنظيم الوقت</h2>
-      <div class="card-header">
-        <div><p>سيف الزهراني</p></div>
-      </div>
-      <p>نظام ذكي لإدارة الوقت بفعالية وتحقيق الأهداف الدراسية بكفاءة عالية</p>
-    </div>
-
-    <div class="card">
-      <h2>برمجة روبوت</h2>
-      <div class="card-header">
-        <div><p>الوليد المنشرة</p></div>
-      </div>
-      <p>مشروع متكامل لبناء وبرمجة روبوت من الصفر باستخدام أحدث التقنيات</p>
-    </div>
-
-    <div class="card">
-      <h2>الأمن السيبراني</h2>
-      <div class="card-header">
-        <div><p>مشعل القحطاني</p></div>
-      </div>
-      <p>استكشاف عالم حماية المعلومات وأمن الشبكات بأساليب حديثة ومتطورة</p>
-    </div>
-
-    <div class="card">
-      <h2>أداة Gamma AI</h2>
-      <div class="card-header">
-        <div><p>طارق القرني</p></div>
-      </div>
-      <p>تقنية متقدمة لصناعة العروض التقديمية والمحتوى باستخدام الذكاء الاصطناعي</p>
-    </div>
-
-    <div class="card">
-      <h2> OpenL</h2>
-      <div class="card-header">
-        <div><p>محمد الغامدي</p></div>
-      </div>
-      <p>موقع ترجمة ذكي يعمل بدقة عالية لتقديم ترجمات احترافية فورية</p>
-    </div>
-
-    <div class="card">
-      <h2>الذكاء الاصطناعي</h2>
-      <div class="card-header">
-        <div><p>منصور اليامي<br>عبدالله العمري<br>ياسر الشهري</p></div>
-      </div>
-      <p>استعراض أشهر أدوات الذكاء الاصطناعي المتقدمة لخدمة الرعاية التعليمية</p>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button class="control-btn prev-btn" onclick="prevCard()">◀️</button>
-    <button class="control-btn pause-btn" onclick="togglePause()">⏸</button>
-    <button class="control-btn next-btn" onclick="nextCard()">▶️</button>
-  </div>
-
-  <div class="indicators" id="indicators"></div>
+  </section>
 </main>
-
-<footer>
-  ©️ 2025 ثانوية مشكاة المنار الأهلية | جميع الحقوق محفوظة
-</footer>
-
-<script>
-// إنشاء الجزيئات المتحركة
-const particlesContainer = document.getElementById('particles');
-for (let i = 0; i < 30; i++) {
-  const particle = document.createElement('div');
-  particle.className = 'particle';
-  particle.style.left = Math.random() * 100 + '%';
-  particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-  particle.style.animationDelay = Math.random() * 5 + 's';
-  particlesContainer.appendChild(particle);
-}
-
-// السلايدر
-let cards = document.querySelectorAll(".card");
-let index = 0;
-let isPaused = false;
-let interval;
-
-// إنشاء المؤشرات
-const indicatorsContainer = document.getElementById('indicators');
-cards.forEach((_, i) => {
-  const indicator = document.createElement('div');
-  indicator.className = 'indicator' + (i === 0 ? ' active' : '');
-  indicator.onclick = () => goToCard(i);
-  indicatorsContainer.appendChild(indicator);
-});
-
-function updateIndicators() {
-  document.querySelectorAll('.indicator').forEach((ind, i) => {
-    ind.classList.toggle('active', i === index);
-  });
-}
-
-function nextCard() {
-  cards[index].classList.remove("active");
-  index = (index + 1) % cards.length;
-  cards[index].classList.add("active");
-  updateIndicators();
-}
-
-function prevCard() {
-  cards[index].classList.remove("active");
-  index = (index - 1 + cards.length) % cards.length;
-  cards[index].classList.add("active");
-  updateIndicators();
-}
-
-function goToCard(i) {
-  cards[index].classList.remove("active");
-  index = i;
-  cards[index].classList.add("active");
-  updateIndicators();
-}
-
-function togglePause() {
-  isPaused = !isPaused;
-  const pauseBtn = document.querySelector('.pause-btn');
-  
-  if (isPaused) {
-    clearInterval(interval);
-    pauseBtn.textContent = '▶️';
-    pauseBtn.classList.add('paused');
-  } else {
-    startAutoPlay();
-    pauseBtn.textContent = '⏸';
-    pauseBtn.classList.remove('paused');
-  }
-}
-
-function startAutoPlay() {
-  interval = setInterval(() => {
-    if (!isPaused) nextCard();
-  }, 4000);
-}
-
-startAutoPlay();
-</script>
-
+<footer>© 2026 <strong>نادي التقنية</strong> | جميع الحقوق محفوظة</footer>
 </body>
 </html>
-
-
-
-
